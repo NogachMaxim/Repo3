@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Teacher profil</title>
+<script src="/jquery.min.js"></script>
+<script src="/popper.min.js"></script>
+<script src="/postrequest.js"></script>
+<style>
+header {
+	background: lightBlue;
+	height: 50px;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	text-transform: uppercase;
+	display: inline-block;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-weight: bold;
+}
+
+footer {
+	width: 100%;
+	text-align: center;
+	height: 35px;
+	background: lavender;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: orange;
+	float: left;
+}
+
+h1 {
+	font-size: 30px;
+	text-align: center;
+	font-weight: bold;
+}
+
+td {
+	width: 100px;
+}
+
+a:link {
+	color: DimGray;
+	text-align: center;
+	text-decoration: none;
+}
+
+a:hover {
+	color: DimGray;
+	text-align: center;
+	text-decoration: none;
+}
+
+a:visited {
+	color: DimGray;
+	text-align: center;
+	text-decoration: none;
+}
+
+input[type=submit] {
+	padding: 5px 15px;
+	background: silver;
+	border: 0 none;
+	border-radius: 5px;
+}
+
+h2 {
+	padding-left: 10px;
+	font-family: "bradley hand", cursive;
+}
+
+div {
+	border: 0px;
+}
+
+.title {
+	font-size: 150%;
+	font-family: "marker felt", cursive;
+	text-transform: uppercase;
+	float: left;
+	padding-top: 10px;
+	padding-right: 30px;
+}
+</style>
+</head>
+<body>
+
+	<header>
+		<div class="title">Learning-Helper</div>
+		<a href="/logout"
+			style="background: silver; padding: 3px; border-radius: 5px; float: right; color: black; margin-top: 19px; margin-right: 10px;">Logout</a>
+		<form style="float: right; padding: 19px;" th:method="post"
+			th:action="@{/deleteTeacher/{id}(id=*{teacher.getId})}">
+			<input style="background: red;" type="submit" value="Delete" />
+		</form>
+		<div
+			th:text="${teacher.getSurname()}+' '+${teacher.getName()}+' '+${teacher.getPatronymic()}"
+			style="font-family: cursive; float: right; margin-top: 19px;"></div>
+
+	</header>
+
+	<br>
+	<div style="font-family: cursive; float: right;">
+		<form th:if="${learnersAskJoin}!=null" th:method="post"
+			th:action="@{/joinLearner/{id}(id=${teacher.getId()})}">
+			<label for="learnersWithJoin">Choose learner what to join: </label> <select
+				name="learner" id="learnersWithJoin" size="1">
+				<option th:each="learner:${learnersAskJoin}"
+					th:text="${learner.getSurname()}"></option>
+			</select> <input style="background: silvel;" type="submit" value="Join" />
+		</form>
+	</div>
+	<div
+		style="width: 350px; margin-left: 30px; padding-top: 35px; float: left;">
+		<div
+			style="height: 30px; width: 150px; background: Lavender; margin-top: 50px; margin-left: -30px; margin-bottom: 30px; padding-left: 30px;">
+			<h2 style="font-style: italic;">Materials</h2>
+		</div>
+
+		<div style="width: 300px; height: 50px; float: left;">
+			<a th:href="@{/addMaterial}">Add new material</a>
+			<hr>
+		</div>
+		<div style="width: 300px;" th:each="material:${materials}">
+			<div style="width: 300px;">
+				<a th:href="@{/material/{id}(id=${material.getId()})}"
+					th:text="${material.getName}"></a>
+			</div>
+		</div>
+		<br> <br> <br>
+		<div
+			style="height: 30px; width: 150px; background: Lavender; margin-left: -30px; margin-bottom: 30px; padding-left: 30px;">
+			<h2 style="font-style: italic;">Tests</h2>
+		</div>
+
+		<form style="width: 350px; float: right; margin-bottom: 10px;"
+			th:method="get" th:action="@{/addTest}">
+			<label for="CountQ">Question count of new test: </label> <input
+				style="width: 30px;" type="text" name="count" id="CountQ" /> <input
+				type="submit" value="Create" />
+		</form>
+		<hr>
+		<br>
+		<div style="width: 400px;" th:each="test:${allTest}">
+			<a th:href="@{/test/{id}(id=${test.getId()})}"
+				th:text="${test.getName}"></a>
+		</div>
+	</div>
+	<br>
+	<br>
+	<br>
+	<div
+		style="width: 400px; border: 1px solid black; float: right; background-color: grey; margin-right: 30px; position: relative;">
+
+		<form th:method="get" th:action="@{/chooseLearner}">
+			<label for="learnerWith">Choose learner for chat: </label> <select
+				name="learner" id="learnerWith" size="1">
+				<option th:each="learner:${learners}"
+					th:text="${learner.getSurname()}"></option>
+			</select> <input type="submit" value="Choose" />
+		</form>
+		<div id="showMesMain"
+			style="width: 400px; height: 350px; border-top: 1px solid black; margin-top: 30px; overflow: auto;">
+			<!-- <div th:if="${messages}!=null" th:each="message:${messages}">
+				<div style="height: auto; width: 390px; float: right;" id="showMes">
+
+					<div th:if="${message.getRole().getName()}=='TEACHER'"
+						style="border: 1px solid black; margin: 5px; padding: 3px; float: right; border-radius: 5px; background-color: LightSalmon; word-break: break-all;"
+						th:text="${message.getText()}"></div>
+					<div th:if="${message.getRole().getName()}=='TEACHER'"
+						style="color: LightGrey; float: right; margin: 5px; font-size: 10px;"
+						th:text="${message.getDateTime()}"></div>
+
+					<div th:if="${message.getRole().getName()}=='LEARNER'"
+						style="border: 1px solid black; float: left; margin: 5px; padding: 3px; border-radius: 5px; background-color: LightSalmon; word-break: break-all;"
+						th:text="${message.getText()}"></div>
+					<div th:if="${message.getRole().getName()}=='LEARNER'"
+						style="color: LightGrey; float: left; margin: 5px; font-size: 10px;"
+						th:text="${message.getDateTime()}"></div>
+
+				</div>
+			</div>-->
+			
+		</div>
+		<div
+			style="border: 1px solid black; position: relative; width: 230px; float: right; bottom: 0px; right: 0px;">
+			<form th:if="${idLearnerWith}!=null" id="sendMes">
+				<!-- th:method="post"
+				th:action="@{/addMessageFromT}" -->
+				<input type="text" id="addingMessage" /> <input type="submit" 
+					value="Send" /> <input type="hidden" id="idLWith"
+					th:value="${idLearnerWith}" />
+			</form>
+		</div>
+	</div>
+	<div style="width: 100%; height: 100px; float: left;">
+		<br> <br> <br> <br> <br>
+		<footer>Developed in 2021</footer>
+	</div>
+</body>
+</html>

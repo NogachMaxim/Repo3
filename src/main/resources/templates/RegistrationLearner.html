@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Registration for Learner</title>
+<style>
+header {
+	background: lavender;
+	height: 50px;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	text-transform: uppercase;
+	display: inline-block;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-weight: bold;
+}
+
+footer {
+	width: 100%;
+	text-align: center;
+	height: 35px;
+	background: lavender;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: orange;
+	position: absolute;
+}
+
+h1 {
+	text-align: center;
+	font-style: italic;
+	color: PaleGoldenrod;
+}
+
+label {
+	margin: 15px;
+}
+
+a:link {
+	color: green;
+	text-align: center;
+}
+
+a:visited {
+	color: green;
+	text-align: center;
+}
+
+a:hover {
+	color: lime;
+	text-align: center;
+}
+
+input {
+	margin: 15px;
+}
+
+input[type=submit] {
+	padding: 5px 15px;
+	background: silver;
+	border: 0 none;
+	border-radius: 1px;
+}
+
+h2 {
+	padding-left: 10px;
+	font-family: "bradley hand", cursive;
+	color:orange;
+}
+
+div {
+	border: 0px;
+}
+
+.title {
+	font-size: 150%;
+	font-family: "marker felt", cursive;
+	text-transform: uppercase;
+	float: left;
+	padding-top: 10px;
+	padding-right: 30px;
+}
+</style>
+</head>
+<body>
+	<div style="float:left; width:50px; height:380px; background:MediumSeaGreen;"></div>
+	<div style="margin-left: 100px;">
+		<div>
+			<h2 style="font-style: italic;">New learner</h2>
+		</div>
+		<br> <label style="font-style: italic; font-size: 19px;">Enter
+			the details of the new learner:</label> <br> <br>
+		<form th:method="post" th:action="@{/registrLearner}"
+			th:object="${newLearner}">
+			<table>
+				<tr>
+					<td><label for="Surname">Surname: </label></td>
+					<td><input type="text" th:field="*{surname}" id="Surname" /></td>
+				</tr>
+				<tr>
+					<td><label for="Name">Name: </label></td>
+					<td><input type="text" th:field="*{name}" id="Name" /></td>
+				</tr>
+				<tr>
+					<td><label for="Patronymic">Patronymic: </label></td>
+					<td><input type="text" th:field="*{patronymic}"
+						id="Patronymic" /></td>
+				</tr>
+				<tr>
+					<td><label for="Password">Password: </label></td>
+					<td><input type="text" th:field="*{password}"
+						id="Password" /></td>
+				</tr>
+				<tr>
+			</table>
+			<input type="submit" value="Registration" />
+		</form>
+		<br>
+	</div>
+</body>
+</html>

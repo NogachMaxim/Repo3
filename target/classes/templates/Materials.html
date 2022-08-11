@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Materials</title>
+<style>
+header {
+	background: lavender;
+	height: 50px;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	text-transform: uppercase;
+	display: inline-block;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-weight: bold;
+}
+
+footer {
+	width: 100%;
+	text-align: center;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	height: 35px;
+	background: lavender;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: orange;
+	position: absolute;
+}
+
+h1 {
+	font-size: 30px;
+	text-align: center;
+	font-weight: bold;
+}
+
+td {
+	width: 100px;
+}
+
+a:link {
+	color: DimGray;
+	text-align: center;
+}
+
+a:hover {
+	color: lime;
+	text-align: center;
+}
+
+a:visited {
+	color: lime;
+	text-align: center;
+}
+
+input[type=submit] {
+	padding: 5px 15px;
+	background: red;
+	border: 0 none;
+	border-radius: 5px;
+}
+
+h2 {
+	padding-left: 10px;
+	font-family: "bradley hand", cursive;
+}
+
+div {
+	border: 0px;
+}
+
+.title {
+	font-size: 150%;
+	font-family: "marker felt", cursive;
+	text-transform: uppercase;
+	float: left;
+	padding-top: 10px;
+	padding-right: 30px;
+}
+</style>
+</head>
+<body>
+
+	<header>
+		<div class="title">Learning-Helper</div>
+	</header>
+
+	<br>
+	<div>
+		<h2 style="font-style: italic;">Materials</h2>
+	</div>
+	<div>
+		<a th:href="@{/addMaterial}">Add new material</a>
+	</div>
+	<br>
+	<div style="width:300px; height:300px;" th:each="material:${materials}">
+		<a th:href="@{/material/{id}(id=${material.getId()})}"
+			th:text="${material.getName}"></a>
+	</div>
+	<br>
+	<hr>
+
+
+
+	<footer>Developed in 2021</footer>
+</body>
+</html>

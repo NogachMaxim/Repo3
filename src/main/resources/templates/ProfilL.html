@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Learner profil</title>
+<script src="/jquery.min.js"></script>
+<script src="/popper.min.js"></script>
+<script src="/postLreq.js"></script>
+
+<style>
+header {
+	background: LightBlue;
+	height: 50px;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	text-transform: uppercase;
+	display: inline-block;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-weight: bold;
+}
+
+footer {
+	width: 100%;
+	text-align: center;
+	background: lavender;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: orange;
+}
+
+h1 {
+	font-size: 30px;
+	text-align: center;
+	font-weight: bold;
+}
+
+td {
+	width: 100px;
+}
+
+a:link {
+	color: DimGray;
+	text-align: center;
+}
+
+a:hover {
+	color: lime;
+	text-align: center;
+}
+
+a:visited {
+	color: lime;
+	text-align: center;
+}
+
+input[type=submit] {
+	padding: 5px 15px;
+	background: silver;
+	border: 0 none;
+	border-radius: 5px;
+}
+
+h2 {
+	padding-left: 10px;
+	font-family: "bradley hand", cursive;
+}
+
+div {
+	border: 0px;
+}
+
+.title {
+	font-size: 150%;
+	font-family: "marker felt", cursive;
+	text-transform: uppercase;
+	float: left;
+	padding-top: 10px;
+	padding-right: 30px;
+}
+</style>
+</head>
+<body>
+
+	<header>
+		<div class="title">Learning-Helper</div>
+		<a href="/logout"
+			style="text-decoration: none; background: silver; padding: 5px; border-radius: 5px; float: right; color: black; margin-top: 17px; margin-right: 10px; margin-left: 10px;">Logout</a>
+		<form style="float: right; padding: 3px;" th:method="post"
+			th:action="@{/deleteLearner/{id}(id=*{learner.getId})}">
+			<input
+				style="background: red; margin-top: 15px; margin-left: 10px;"
+				type="submit" value="Delete" />
+		</form>
+		<div
+			th:text="${learner.getSurname()}+' '+${learner.getName()}+' '+${learner.getPatronymic()}"
+			style="font-family: cursive; float: right; margin-top: 19px;"></div>
+
+	</header>
+	<div
+		style="font-family: cursive; float: right; margin-right: 10px; margin-top: 30px;">
+		<form th:if="${teachers}!=null" th:method="post"
+			th:action="@{/joinTeacher/{id}(id=${learner.getId()})}">
+			<label for="teacherWithJoin">Choose teacher with what you
+				want to join: </label> <select name="teacher" id="teacherJoin" size="1">
+				<option th:each="teacher:${teachers}"
+					th:text="${teacher.getSurname()}"></option>
+			</select> <input style="background: silvel;" type="submit" value="Join" />
+		</form>
+		<div th:if="${teacherJoin}!=null"
+			th:text="'Join to '+${teacherJoin.getSurname()}"
+			style="text-decoration: underline;"></div>
+	</div>
+	<div style="margin-top: 30px; padding: 10px; font-family: cursive;"
+		th:text="'You statistic is '+*{statistic}+'%'"></div>
+
+
+	<div
+		style="width: 300px; margin-left: 70px; margin-top: 30px; float: left;">
+
+		<div
+			style="height: 30px; width: 250px; background: Lavender; margin-top: 30px; margin-left: -30px; margin-bottom: 30px; padding-left: 50px;">
+			<h2 style="font-style: italic;">Materials</h2>
+		</div>
+		<hr>
+		<div th:each="material:${materials}">
+			<a th:href="@{/material/{id}(id=${material.getId()})}"
+				th:text="${material.getName}"></a>
+		</div>
+
+		<div style="margin-top: 90px;">
+			<div
+				style="height: 30px; width: 230px; background: Lavender; margin-top: 50px; margin-left: -30px; margin-bottom: 30px; padding-left: 70px;">
+				<h2 style="font-style: italic;">Tests</h2>
+			</div>
+			<hr>
+			<h3>Choose test to pass:</h3>
+		</div>
+		<div style="width: 300px; height: 50px;" th:each="test:${allTest}">
+			<form th:method="get"
+				th:action="@{/passTest/{id}(id=${test.getId()})}">
+				<input type="submit"
+					style="background: white; border: 1px solid black; color: lime;"
+					th:value="${test.getName()}" /> <input type="hidden"
+					name="learnerId" th:value="${learner.getId()}" />
+			</form>
+
+		</div>
+	</div>
+	<div
+		style="width: 400px; border: 1px solid black; float: right; margin-right: 30px; margin-top: 30px; position: relative; background-color: grey;">
+
+		<div style="width: 400px; height: 350px; overflow: auto;"
+			id="showMesL">
+			<!--<div th:if="${messages}!=null" th:each="message:${messages}">
+				<div style="height: auto; width: 400px; float: right;">
+					<div th:if="${message.getRole().getName()}=='LEARNER'"
+						style="border: 1px solid black; margin: 5px; padding: 3px; float: right; border-radius: 5px; background-color: LightSalmon; word-break: break-all;"
+						th:text="${message.getText()}"></div>
+					<div th:if="${message.getRole().getName()}=='LEARNER'"
+						style="color: LightGrey; float: right; margin: 5px; font-size: 10px;"
+						th:text="${message.getDateTime()}"></div>
+
+					<div th:if="${message.getRole().getName()}=='TEACHER'"
+						style="border: 1px solid black; float: left; margin: 10px; padding: 3px; border-radius: 5px; background-color: LightSalmon; word-break: break-all;"
+						th:text="${message.getText()}"></div>
+					<div th:if="${message.getRole().getName()}=='TEACHER'"
+						style="color: LightGrey; float: left; margin: 5px; font-size: 10px;"
+						th:text="${message.getDateTime()}"></div>
+
+				</div>
+			</div>-->
+			
+		</div>
+
+
+		<div
+			style="border: 1px solid black; position: relative; width: 235px; float: right; bottom: 0px; right: 0px;">
+			<form th:if="${teacherJoin}!=null" id="sendMesL">
+				<!-- th:method="post"
+				th:action="@{/addMessageFromL}" -->
+				<input type="text" id="addingMessageL" /> <input type="submit"
+					value="Send" /> <input type="hidden" id="IdLearner"
+					th:value="${learner.getId()}" />
+			</form>
+		</div>
+	</div>
+	<br>
+
+	<div style="width: 100%; float: left;">
+		<br> <br> <br>
+		<footer>Developed in 2021</footer>
+	</div>
+</body>
+</html>

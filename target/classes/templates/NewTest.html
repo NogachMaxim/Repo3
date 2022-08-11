@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>New test</title>
+<style>
+header {
+	background: lavender;
+	height: 50px;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	text-transform: uppercase;
+	display: inline-block;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-weight: bold;
+}
+
+footer {
+	width: 100%;
+	text-align: center;
+	height: 35px;
+	background: lavender;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: orange;
+	position: absolute;
+}
+
+h1 {
+	text-align: center;
+	font-style: italic;
+	color: PaleGoldenrod;
+}
+
+label {
+	color: DarkSalmon;
+	text-transform:uppercase;
+	margin: 15px;
+}
+
+a:link {
+	color: green;
+	text-align: center;
+}
+
+a:visited {
+	color: green;
+	text-align: center;
+}
+
+a:hover {
+	color: lime;
+	text-align: center;
+}
+
+input {
+	margin: 15px;
+}
+
+input[type=submit] {
+	padding: 5px 15px;
+	background: silver;
+	border: 0 none;
+	border-radius: 1px;
+}
+
+div {
+	margin: 1px;
+}
+
+.b {
+	float: left;
+	background-color: grey;
+	width: 20%;
+	height: 170px;
+}
+
+.a {
+	font-weight: bold;
+	font-size: 20px;
+	float: left;
+	width: 19%;
+	height: 120px;
+	line-height: 150px;
+	text-align: center;
+}
+
+.title {
+	font-size: 150%;
+	font-family: "marker felt", cursive;
+	text-transform: uppercase;
+	float: left;
+	padding-top: 10px;
+	padding-right: 30px;
+}
+
+h2 {
+	padding-left: 10px;
+	font-family: "bradley hand", cursive;
+}
+
+td {
+	font-size: 20px;
+	width: 300px;
+}
+</style>
+</head>
+<body>
+	<header>
+		<div class="title">Learning-Helper</div>
+	</header>
+	<br>
+	<form th:method="post" th:action="@{/addTest}" th:object="${test}" style="margin-left:30px;">
+		<label for="NameTest">Test name: </label> <input type="text"
+			th:field="*{name}" id="NameTest" />
+		<hr>
+		<div th:each="question, questionStat:${test.questions}">
+			<div th:text="'Question '+${questionStat.index+1}"></div>
+			<input style="width: 700px; " type="text" placeholder="Question text"
+				th:field="*{questions[__${questionStat.index}__].strQuestion}" /> <br>
+			<div
+				th:each="answer, answerStat : ${test.questions[__${questionStat.index}__].answers}">
+				<input type="checkbox"
+					th:field="${test.questions[__${questionStat.index}__].answers[__${answerStat.index}__].isTrue}">
+				<input type="text"
+					th:field="${test.questions[__${questionStat.index}__].answers[__${answerStat.index}__].strAnswer}" placeholder="answer" />
+			</div>
+
+		</div>
+		<input type="submit" value="Create New Test" />
+	</form>
+
+</body>
+</html>

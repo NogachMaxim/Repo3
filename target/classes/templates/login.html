@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Login page</title>
+<style>
+header {
+	background: lavender;
+	height: 50px;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	text-transform: uppercase;
+	display: inline-block;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-weight: bold;
+}
+
+footer {
+	width: 100%;
+	text-align: center;
+	height: 35px;
+	background: lavender;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: orange;
+	position: absolute;
+}
+
+h1 {
+	margin-left: 210px; 
+	font-style : italic;
+	color: darkOrange;
+	font-style: italic;
+}
+
+label {
+	margin: 15px;
+}
+
+a:link {
+	color: Grey;
+	text-align: center;
+}
+
+a:visited {
+	color: Grey;
+	text-align: center;
+}
+
+a:hover {
+	color: lime;
+	text-align: center;
+}
+
+input {
+	margin: 15px;
+	height: 30px;
+}
+
+input[type=submit] {
+	padding: 5px 15px;
+	background: silver;
+	border: 0 none;
+	border-radius: 1px;
+	width:157px;
+	height:35px;
+}
+
+h2 {
+	padding-left: 10px;
+	font-family: "bradley hand", cursive;
+}
+
+div {
+	border: 0px;
+}
+
+.title {
+	font-size: 150%;
+	font-family: "marker felt", cursive;
+	text-transform: uppercase;
+	float: left;
+	padding-top: 10px;
+	padding-right: 30px;
+}
+</style>
+</head>
+<body>
+	<div
+		style="float: left; width: 50px; height: 370px; background: MediumSeaGreen;"></div>
+	<div style="margin-left: 100px;">
+		<h1>User Login Page</h1>
+		<form th:action="@{/login}" method="post">
+
+
+			<div style="margin-left: 150px;">
+				<label for="username"> Surname </label> : <input type="text"
+					id="username" name="username" placeholder="Enter Surname"
+					autofocus="autofocus">
+			</div>
+
+			<div style="margin-left: 150px;">
+				<label for="password">Password</label>: <input type="password"
+					id="password" name="password" placeholder="Enter Password" />
+			</div>
+
+			<div style="margin-left: 250px;">
+				<div>
+					<input type="submit" name="login-submit" id="login-submit"
+						value="Log In" />
+				</div>
+
+			</div>
+		</form>
+		<br>
+	</div>
+	<a style="margin-right: 150px; margin-left: 140px;" href="/"
+		th:href="@{/registrTeacher}">Registration as new teacher</a>
+	<a href="/" th:href="@{/registrLearner}">Registration as new
+		learner</a>
+</body>
+</html>
